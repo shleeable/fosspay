@@ -121,7 +121,7 @@
                 <td>{{ currency.amount("{:.2f}".format(donation.amount / 100)) }}</td>
                 <td>
                     {{ "Once" if str(donation.type) == "DonationType.one_time" else "Monthly" }}
-                    {{ "(cancelled)" if not donation.active else "" }}
+                    {{ "(canceled)" if not donation.active else "" }}
                 </td>
                 <td>
                     {{donation.payments}}
