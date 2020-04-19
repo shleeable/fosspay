@@ -18,14 +18,13 @@
 {% set gh_progress = gh_sum / adjusted_goal %}
 {% set progress = total_sum / goal %}
 
-<h3 class="text-center">Goal: 
-{{ currency.amount("{:.2f}".format(total_sum / 100))}}
- of
- {{ currency.amount("{:.2f}".format(goal / 100)) }}/month
-</h3>
-
-<div class="container" style="padding-top: 5rem">
   <div class="row">
+    <h3 class="text-center">Goal: 
+      {{ currency.amount("{:.2f}".format(total_sum / 100))}}
+       of
+       {{ currency.amount("{:.2f}".format(goal / 100)) }}/month
+    </h3>
+
     <div class="col-md-8 col-md-offset-2">
       <div class="progress" style="height: 3rem">
         <div
@@ -108,5 +107,5 @@
       {% include "goal-summary.html" %}
     </div>
   </div>
-</div>
+
 {% endif %}
