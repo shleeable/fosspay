@@ -51,7 +51,7 @@ You will need a number of things set up before you start:
 
 * Setup Crontab
 ```
-    x x x x x * * * * * cd /path-to-your-project && docker-compose run --rm fosspay python3 /usr/src/app/cronjob.py >> /dev/null 2>&1 && docker-compose restart fosspay
+    * * * * * cd /path-to-your-project && docker-compose run --rm fosspay python3 /usr/src/app/cronjob.py >> /dev/null 2>&1 && docker-compose restart fosspay
 ```
 
 * Setup nginx reverse proxy with HTTPS TLS - see `contrib/nginx.conf`
