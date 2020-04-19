@@ -6,6 +6,25 @@
         comment: null
     };
 
+    function formatCents(cents) {
+        var dollars = Math.floor(cents/100);
+        var leftover = Math.floor(cents%100);
+        return String(dollars)+"."+String(leftover+100).substring(1);
+    }
+
+    function updateFee() {
+        var amt = donation.amount;
+        amt -= 30;
+        amt *= 0.971;
+        amt = Math.floor(amt);
+        var fee = donation.amount-amt;
+        var pct = ((fee/donation.amount)*100).toFixed(1);
+        document.getElementById("after-fees").textContent = formatCents(amt);
+        document.getElementById("fee").textContent = formatCents(fee);
+        document.getElementById("fee-pct").textContent = pct;
+        document.getElementById("fee-pct-wrapper").style.fontWeight = pct > 10 ? 700 : 400;
+    }
+
     function selectAmount(e) {
         e.preventDefault();
         document.querySelector(".amounts .active").classList.remove("active");
@@ -19,6 +38,7 @@
             custom.classList.add("hidden");
             donation.amount = +e.target.dataset.amount * 100;
         }
+        updateFee();
     }
 
     function selectFrequency(e) {
@@ -40,14 +60,12 @@
 
     document.getElementById("custom-amount-text").addEventListener("change", function(e) {
         var value = +e.target.value;
-        if (isNaN(value)) {
+        if (isNaN(value) || value <= 1) {
             value = 1;
         }
-        if (value <= 0) {
-            value = 1;
-        }
-        e.target.value = value;
+        e.target.value = value.toFixed(2);
         donation.amount = value * 100;
+        updateFee();
     });
 
     var project = document.getElementById("project")
@@ -118,5 +136,9 @@
         });
 
         handler.open();
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        updateFee();
     });
 })();
