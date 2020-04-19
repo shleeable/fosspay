@@ -12,7 +12,7 @@ Donation collection for FOSS groups and individuals.
 
 * Added Docker Support
 * Added additional currencies - Example: aud
-* Moved from Postgres to SQLite.
+* Added Fee description
 
 ## Notes
 
