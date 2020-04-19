@@ -6,6 +6,5 @@ Flask-Login
 bcrypt
 gunicorn
 sqlalchemy-utils
-pystache
 patreon
 psycopg2  # postgres

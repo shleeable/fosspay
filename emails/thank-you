@@ -2,12 +2,11 @@ Thank you for donating!
 
 Receipt:
 
-{{#monthly}}
+{%if monthly%}
 Monthly donation                {{amount}}
-{{/monthly}}
-{{^monthly}}
+{%else%}
 One-time donation               {{amount}}
-{{/monthly}}
+{%endif%}
 
 You can view and manage your donations online here:
 
