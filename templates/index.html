@@ -154,11 +154,17 @@ window.email = "{{user.email}}";
     {% if not user %}
     <p>
         <small class="text-muted">
-            Been here before? <a href="login">Log in</a> to view your donation
-            history, edit recurring donations, and so on.
+          Been here before? <a href="login">Log in</a> to view your donation
+          history, edit recurring donations, and so on. :)
         </small>
     </p>
+    {% else %}
+    <p>
+            You are logged in - <a href="panel">Click here</a> to view your donation
+            history, edit recurring donations, and so on. :)
+    </p>
     {% endif %}
+
     <p>
         <small class="text-muted">
             Powered by <a href="https://github.com/shleeable/shleepay">Shleepay (Fosspay fork)</a>.
