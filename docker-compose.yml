@@ -9,6 +9,7 @@ services:
     image: fosspay
     restart: unless-stopped
     volumes:
+      - "./db/:/usr/src/app/db/"
       - "./config.ini:/usr/src/app/config.ini"
     command: gunicorn app:app -b 0.0.0.0:5000
     networks:
