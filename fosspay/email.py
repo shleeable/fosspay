@@ -85,9 +85,9 @@ def send_new_donation(user, donation):
                 root = _cfg("protocol") + "://" + _cfg("domain"),
                 your_name = _cfg("your-name"),
                 amount = currency.amount("{:.2f}".format(amount / 100)),
-                "frequency": (" per month"
+                frequency = (" per month"
                     if donation.type == DonationType.monthly else ""),
-                "comment": donation.comment or "",
+                comment = donation.comment or ""
     ))
     message['Subject'] = "New donation on ShleePay!"
     message['From'] = _cfg("smtp-from")
