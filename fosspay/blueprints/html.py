@@ -195,7 +195,7 @@ def login():
         return redirect("admin")
     return redirect("panel")
 
-@html.route("/logout")
+@html.route("/logout", methods=["POST"])
 @loginrequired
 def logout():
     logout_user()
@@ -330,7 +330,7 @@ def panel():
         recurring=lambda u: [d for d in u.donations if d.type == DonationType.monthly and d.active],
         currency=currency)
 
-@html.route("/cancel/<id>")
+@html.route("/cancel/<id>", methods=["POST"])
 @loginrequired
 def cancel(id):
     donation = Donation.query.filter(Donation.id == id).first()
