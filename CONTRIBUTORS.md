@@ -8,5 +8,5 @@ OniriCorpe
 Auxeras
 Eliot Berriot
 
-# Shleepay
+# ShleePay
 Shlee

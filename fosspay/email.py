@@ -80,19 +80,16 @@ def send_new_donation(user, donation):
     smtp.ehlo()
     smtp.starttls()
     smtp.login(_cfg("smtp-user"), _cfg("smtp-password"))
-    with open("emails/new_donation") as f:
-        message = MIMEText(html.parser.HTMLParser().unescape(\
-            pystache.render(f.read(), {
-                "user": user,
-                "root": _cfg("protocol") + "://" + _cfg("domain"),
-                "your_name": _cfg("your-name"),
-                "amount": currency.amount("{:.2f}".format(
-                    donation.amount / 100)),
+    message = MIMEText(render_template("emails/new_donation-you", 
+                user = user,
+                root = _cfg("protocol") + "://" + _cfg("domain"),
+                your_name = _cfg("your-name"),
+                amount = currency.amount("{:.2f}".format(amount / 100)),
                 "frequency": (" per month"
                     if donation.type == DonationType.monthly else ""),
                 "comment": donation.comment or "",
-            })))
-    message['Subject'] = "New donation on fosspay!"
+    ))
+    message['Subject'] = "New donation on ShleePay!"
     message['From'] = _cfg("smtp-from")
     message['To'] = f"{_cfg('your-name')} <{_cfg('your-email')}>"
     message['Date'] = format_datetime(localtime())
@@ -106,16 +103,13 @@ def send_cancellation_notice(user, donation):
     smtp.ehlo()
     smtp.starttls()
     smtp.login(_cfg("smtp-user"), _cfg("smtp-password"))
-    with open("emails/cancelled") as f:
-        message = MIMEText(html.parser.HTMLParser().unescape(\
-            pystache.render(f.read(), {
-                "user": user,
-                "root": _cfg("protocol") + "://" + _cfg("domain"),
-                "your_name": _cfg("your-name"),
-                "amount": currency.amount("{:.2f}".format(
-                    donation.amount / 100)),
-            })))
-    message['Subject'] = "A monthly donation on fosspay has been cancelled"
+    message = MIMEText(render_template("emails/cancelled", 
+                user = user,
+                root = _cfg("protocol") + "://" + _cfg("domain"),
+                your_name = _cfg("your-name"),
+                amount = currency.amount("{:.2f}".format(amount / 100)),
+    ))
+    message['Subject'] = "A monthly donation on ShleePay has been cancelled"
     message['From'] = _cfg("smtp-from")
     message['To'] = f"{_cfg('your-name')} <{_cfg('your-email')}>"
     message['Date'] = format_datetime(localtime())

@@ -2,11 +2,11 @@
 version: '3'
 
 services:
-  fosspay:
+  ShleePay:
     build:
       context: .
       dockerfile: Dockerfile
-    image: fosspay
+    image: ShleePay
     restart: unless-stopped
     volumes:
       - "./db/:/usr/src/app/db/"
