@@ -14,7 +14,7 @@ import subprocess
 stripe.api_key = _cfg("stripe-secret")
 
 # Date in global standard
-print("Processing monthly donations @ ".format(datetime.now().strftime('%d-%m-%Y %H:%M:%S')))
+print("Processing monthly donations @ {}".format(datetime.now().strftime('%d-%m-%Y %H:%M:%S')))
 
 donations = Donation.query \
     .filter(Donation.type == DonationType.monthly) \
@@ -49,7 +49,7 @@ for donation in donations:
     else:
         print("Skipping {}".format(donation))
 
-print("{} records processed.".format(len(donations)))
+print("{} records processed.\n".format(len(donations)))
 
 if _cfg("patreon-refresh-token"):
     print("Updating Patreon API token")
