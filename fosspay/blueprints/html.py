@@ -216,7 +216,7 @@ def donate():
         return { "success": False, "reason": "Invalid request" }, 400
     try:
         if project_id is None or project_id == "null":
-            project = "0"
+            project = int(0)
         else:
             project_id = int(project_id)
             project = Project.query.filter(Project.id == project_id).first()
