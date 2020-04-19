@@ -64,7 +64,7 @@ def send_declined(user, amount):
                 user = user,
                 root = _cfg("protocol") + "://" + _cfg("domain"),
                 your_name = _cfg("your-name"),
-                amount = currency.amount("{:.2f}".format(donation.amount / 100))
+                amount = currency.amount("{:.2f}".format(amount / 100))
     ))
     message['Subject'] = "Your monthly donation was declined."
     message['From'] = _cfg("smtp-from")

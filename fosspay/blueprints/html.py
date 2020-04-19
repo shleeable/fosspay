@@ -267,7 +267,7 @@ def donate():
         db.close()
         return { "success": False, "reason": "Your card was declined." }
 
-    transaction = stripe.BalanceTransaction.retrieve(charge.balance_transaction);
+    transaction = stripe.BalanceTransaction.retrieve(charge.balance_transaction)
 
     donation = Donation(user, type, transaction.net, project, comment)
     db.add(donation)
