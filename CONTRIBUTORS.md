@@ -6,6 +6,7 @@ michcioperz
 # Transpay
 OniriCorpe
 Auxeras
+Eliot Berriot
 
 # Shleepay
 Shlee
