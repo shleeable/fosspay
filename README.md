@@ -12,7 +12,7 @@ Donation collection for FOSS groups and individuals.
 
 * Added Docker Support
 * Added additional currencies - Example: aud
-* Added Fee description
+* Added Fee description - (from unascribed fork)
 
 ## Notes
 
