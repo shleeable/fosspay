@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from fosspay.app import app
 from fosspay.objects import *
 from fosspay.database import db
 from fosspay.config import _cfg
@@ -11,7 +12,8 @@ import requests
 import stripe
 import subprocess
 
-stripe.api_key = _cfg("stripe-secret")
+with app.app_context():    
+    stripe.api_key = _cfg("stripe-secret")
 
 # Date in global standard
 print("Processing monthly donations @ {}".format(datetime.now().strftime('%d-%m-%Y %H:%M:%S')))
