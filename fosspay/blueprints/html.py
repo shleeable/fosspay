@@ -246,9 +246,6 @@ def donate():
         customer.default_source = new_source.id
         customer.save()
 
-    donation = Donation(user, type, amount, project, comment)
-    db.add(donation)
-
     try:
         charge = stripe.Charge.create(
             amount=amount,
@@ -261,6 +258,10 @@ def donate():
         db.close()
         return { "success": False, "reason": "Your card was declined." }
 
+    transaction = stripe.BalanceTransaction.retrieve(charge.balance_transaction);
+
+    donation = Donation(user, type, transaction.net, project, comment)
+    db.add(donation)
     db.commit()
 
     send_thank_you(user, amount, type == DonationType.monthly)
