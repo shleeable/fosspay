@@ -12,6 +12,7 @@ class Currency:
             return self.symbol + amount
 
 currencies = {
+    'aud' : Currency("$", "left"),
     'usd' : Currency("$", "left"),
     'eur' : Currency("€", "right")
     # ... More currencies can be added here

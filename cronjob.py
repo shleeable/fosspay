@@ -69,8 +69,3 @@ if _cfg("patreon-refresh-token"):
     with open("config.ini", "w") as f:
         f.write(config)
     print("Refreshed Patreon API token")
-    reload_cmd = _cfg("reload-command")
-    if not reload_cmd:
-        print("Cannot reload application, add reload-command to config.ini")
-    else:
-        subprocess.run(reload_cmd, shell=True, check=True)

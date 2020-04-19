@@ -162,6 +162,17 @@ def create_project():
     db.commit()
     return redirect("admin")
 
+
+@html.route("/delete-project", methods=["POST"])
+@adminrequired
+def delete_project():
+    id = request.form.get("id")
+    project = Project.query.get(id)
+    db.delete(project)
+    db.commit()
+    return redirect("admin")
+
+
 @html.route("/login", methods=["GET", "POST"])
 def login():
     if current_user:
@@ -184,7 +195,7 @@ def login():
         return redirect("admin")
     return redirect("panel")
 
-@html.route("/logout")
+@html.route("/logout", methods=["POST"])
 @loginrequired
 def logout():
     logout_user()
@@ -235,9 +246,6 @@ def donate():
         customer.default_source = new_source.id
         customer.save()
 
-    donation = Donation(user, type, amount, project, comment)
-    db.add(donation)
-
     try:
         charge = stripe.Charge.create(
             amount=amount,
@@ -250,6 +258,10 @@ def donate():
         db.close()
         return { "success": False, "reason": "Your card was declined." }
 
+    transaction = stripe.BalanceTransaction.retrieve(charge.balance_transaction);
+
+    donation = Donation(user, type, transaction.net, project, comment)
+    db.add(donation)
     db.commit()
 
     send_thank_you(user, amount, type == DonationType.monthly)
@@ -319,7 +331,7 @@ def panel():
         recurring=lambda u: [d for d in u.donations if d.type == DonationType.monthly and d.active],
         currency=currency)
 
-@html.route("/cancel/<id>")
+@html.route("/cancel/<id>", methods=["POST"])
 @loginrequired
 def cancel(id):
     donation = Donation.query.filter(Donation.id == id).first()

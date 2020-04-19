@@ -1,0 +1,42 @@
+---
+version: '3'
+
+services:
+  fosspay:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fosspay
+    restart: unless-stopped
+    volumes:
+      - "./db/:/usr/src/app/db/"
+      - "./config.ini:/usr/src/app/config.ini"
+    command: gunicorn app:app -b 0.0.0.0:5000
+    networks:
+      - external
+      - internal
+    ports:
+     - "127.0.0.1:5000:5000"
+    depends_on:
+      - postgres
+      
+  postgres:
+    restart: unless-stopped
+    image: postgres:12
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    shm_size: 64M
+
+networks:
+  external:
+    driver: bridge
+  internal:
+    internal: true    

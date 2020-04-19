@@ -27,6 +27,7 @@ your-email=joe@example.org
 # SQL connection string
 connection-string=postgresql://postgres:postgres@postgres/postgres
 
+
 # Stripe API info: https://dashboard.stripe.com/account/apikeys
 stripe-secret=
 stripe-publish=

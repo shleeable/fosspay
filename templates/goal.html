@@ -1,24 +1,31 @@
 {% if _cfg("public-income") == "yes" %}
-<div class="container" style="padding-top: 5rem">
+
+{% set total_sum = recurring_sum + patreon_sum + lp_sum + gh_sum %}
+{% set total_count = recurring_count + patreon_count + lp_count + gh_count %}
+{% if _cfg("goal") %}
+{% set goal = int(_cfg("goal")) %}
+
+{% if goal < total_sum %}
+{# Make the graph still make sense if we exceeded the goal #}
+{% set adjusted_goal = total_sum %}
+{% else %}
+{% set adjusted_goal = goal %}
+{% endif %}
+
+{% set recurring_progress = recurring_sum / adjusted_goal %}
+{% set patreon_progress = patreon_sum / adjusted_goal %}
+{% set lp_progress = lp_sum / adjusted_goal %}
+{% set gh_progress = gh_sum / adjusted_goal %}
+{% set progress = total_sum / goal %}
+<hr />
   <div class="row">
+    <h3 class="text-center">Goal: 
+      {{ currency.amount("{:.2f}".format(total_sum / 100))}}
+       of
+       {{ currency.amount("{:.2f}".format(goal / 100)) }}/month
+    </h3>
+
     <div class="col-md-8 col-md-offset-2">
-      {% set total_sum = recurring_sum + patreon_sum + lp_sum + gh_sum %}
-      {% set total_count = recurring_count + patreon_count + lp_count + gh_count %}
-      {% if _cfg("goal") %}
-      {% set goal = int(_cfg("goal")) %}
-
-      {% if goal < total_sum %}
-      {# Make the graph still make sense if we exceeded the goal #}
-      {% set adjusted_goal = total_sum %}
-      {% else %}
-      {% set adjusted_goal = goal %}
-      {% endif %}
-
-      {% set recurring_progress = recurring_sum / adjusted_goal %}
-      {% set patreon_progress = patreon_sum / adjusted_goal %}
-      {% set lp_progress = lp_sum / adjusted_goal %}
-      {% set gh_progress = gh_sum / adjusted_goal %}
-      {% set progress = total_sum / goal %}
       <div class="progress" style="height: 3rem">
         <div
           class="progress-bar progress-bar-primary"
@@ -93,19 +100,6 @@
       </p>
       {% endif %}
       {% endif %}
-      {% if goal %}
-      <p class="{{ "text-center" if not patreon_sum else "" }}">
-        {{ currency.amount("{:.2f}".format(total_sum / 100))}}/mo
-        of
-        {{ currency.amount("{:.2f}".format(goal / 100)) }}/mo
-        goal
-      </p>
-      {% else %}
-      <p>
-        Supported with {{ currency.amount("{:.2f}".format(total_sum / 100)) }}
-        from {{ total_count }} supporters!
-      </p>
-      {% endif %}
     </div>
   </div>
   <div class="row">
@@ -113,5 +107,5 @@
       {% include "goal-summary.html" %}
     </div>
   </div>
-</div>
+
 {% endif %}

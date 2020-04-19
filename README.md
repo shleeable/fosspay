@@ -1,4 +1,5 @@
-# fosspay [![Donate with fosspay](https://drewdevault.com/donate/static/donate-with-fosspay.png)](https://drewdevault.com/donate?project=3)
+# shleepay-fosspay
+*fosspay fork*
 
 Donation collection for FOSS groups and individuals.
 
@@ -6,12 +7,16 @@ Donation collection for FOSS groups and individuals.
 * Process cards with Stripe
 * Flexible and customizable
 
-It works for individuals (like me) and it works for organizations. Expect to
-spend about an hour or two setting up everything and then you're good to go.
+## Changes from fosspay
+*patches and inspiration taken from many many other forks*
 
-For support, visit [#cmpwn on
-irc.freenode.net](http://webchat.freenode.net/?channels=cmpwn&uio=d4)
-or file a GitHub issue.
+* Added Docker Support
+* Added additional currencies - Example: aud
+* Added Fee description - (from unascribed fork)
+
+## Notes
+
+* you must serve your site with https for Stripe to work.
 
 ## Before you start
 
@@ -24,47 +29,32 @@ You will need a number of things set up before you start:
 
 ## Installation
 
-Install these things:
+* Install Docker, and Docker-Compose.
 
-* Python 3
-* pip (python 3)
-* PostgreSQL
+* Clone the git repository on the server that you want to host shleepay on:
+```
+    git clone git://github.com/shleeable/shleepay.git
+    cd shleepay
+```
 
-You're responsible for setting up PostgreSQL yourself. Prepare a connection
-string for later.
+* Create and edit the configuration file:
+```
+    cp config.ini.docker config.ini
+    vim config.ini
+```
 
-Clone the git repository on the server that you want to host fosspay on:
+* Build and start shleepay using docker-compose
+```
+    docker-compose build
+    docker-compose up -d
+```
 
-    git clone git://github.com/ddevault/fosspay.git
-    cd fosspay
+* Setup Crontab
+```
+    * * * * * cd /path-to-your-project && docker-compose run --rm fosspay python3 /usr/src/app/cronjob.py >> /dev/null 2>&1 && docker-compose restart fosspay
+```
 
-Install the Python packages:
+* Setup nginx reverse proxy with HTTPS TLS - see `contrib/nginx.conf`
+* Setup DNS.
 
-    sudo pip3 install -r requirements.txt
-
-Compile the static assets:
-
-    make
-
-Create a configuration file:
-
-    cp config.ini.example config.ini
-
-Edit `config.ini` to your liking. Then, you can run the following to start up
-the development server:
-
-    python3 app.py
-
-Log into http://your-domain:5000, and you will receive further instructions.
-
-## Deployment
-
-Once you have everything configured, you will need to switch from the dev server
-into something more permanent. Install gunicorn on your server and use the
-systemd unit provided in `contrib/`. You will also probably want to run this
-through nginx instead of directly exposing gunicorn to the web, see
-`contrib/nginx.conf`. Neither the nginx configuration or the systemd unit are
-immediately ready to use - read them and change them to suit your needs.
-
-Using nginx or something like it is necessary for SSL support, and you must
-serve your site with https for Stripe to work.
+* Log into https://donate.domain.com, and you will receive further instructions.

@@ -88,9 +88,15 @@ window.email = "{{user.email}}";
       </div>
     </div>
   </div>
+
+  <div style="margin-top: 16px; text-align: center;">
+    We will actually receive <strong>$<span id="after-fees">0.00</span></strong>, after a 2.9% + 30¢ ($<span id="fee">0.00</span>) fee.
+    <!-- that's <span id="fee-pct-wrapper"><span id="fee-pct">0</span>% of your donation</span> in fees. -->
+  </div>
+
   <h3>How often?</h3>
   <div class="row">
-    <div class="col-md-4 col-md-offset-4">
+    <div class="col-md-8 col-md-offset-2">
       <div class="form-group">
         <div class="btn-group btn-group-justified frequencies" role="group" aria-label="...">
           <div class="btn-group" role="group">
@@ -110,7 +116,7 @@ window.email = "{{user.email}}";
     {% if len(projects) > 1 %}
     <h3>What project?</h3>
     <div class="row">
-        <div class="col-md-4 col-md-offset-4">
+        <div class="col-md-8 col-md-offset-2">
             <div class="form-group">
                 <select id="project" name="project" class="form-control">
                     <option value="null"
@@ -125,22 +131,24 @@ window.email = "{{user.email}}";
     </div>
     {% endif %}
     <div class="row">
-        <div class="col-md-4 col-md-offset-4">
+        <div class="col-md-8 col-md-offset-2">
             <div class="form-group">
                 <input type="text" id="comments" class="form-control" placeholder="Any comments?" maxlength="512" />
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4 col-md-offset-4">
+        <div class="col-md-8 col-md-offset-2">
             <div class="alert alert-danger hidden" id="errors">
                 <p></p>
             </div>
             <button class="btn btn-block btn-success" id="donate-button">Donate</button>
         </div>
     </div>
+
+  {% include "goal.html" %}
+
 </div>
-{% include "goal.html" %}
 <hr />
 <div class="container text-center">
     {% if not user %}
@@ -153,7 +161,7 @@ window.email = "{{user.email}}";
     {% endif %}
     <p>
         <small class="text-muted">
-            Powered by <a href="https://github.com/ddevault/fosspay">fosspay</a>.
+            Powered by <a href="https://github.com/shleeable/shleepay">Shleepay (Fosspay fork)</a>.
         </small>
     </p>
 </div>
