@@ -25,7 +25,8 @@ your-email=joe@example.org
 # ^ you should have a gravatar that works with this email
 
 # SQL connection string
-connection-string=sqlite+pysqlite:///db/shleepay.db
+connection-string=postgresql://postgres:postgres@postgres/postgres
+
 
 # Stripe API info: https://dashboard.stripe.com/account/apikeys
 stripe-secret=
