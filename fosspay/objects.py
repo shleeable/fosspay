@@ -56,7 +56,7 @@ class Donation(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     user = relationship("User", backref=backref("donations"))
-    project_id = Column(Integer, ForeignKey("projects.id"))
+    project_id = Column(String(10), ForeignKey("projects.id"))
     project = relationship("Project", backref=backref("donations"))
     type = Column(ChoiceType(DonationType, impl=String()))
     amount = Column(Integer, nullable=False)
