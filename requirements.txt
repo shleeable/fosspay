@@ -8,3 +8,4 @@ bcrypt
 gunicorn
 sqlalchemy-utils
 pystache
+patreon
