@@ -26,7 +26,7 @@
         {% for donation in recurring_active(user) %}
             <tr>
                 <td>
-                    <form method="DELETE" action="{{root}}/cancel/{{ donation.id }}">
+                    <form method="POST" action="{{root}}/cancel/{{ donation.id }}">
                         <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
                     </form>
                 </td>

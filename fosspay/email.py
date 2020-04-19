@@ -64,7 +64,7 @@ def send_declined(user, amount):
                 user = user,
                 root = _cfg("protocol") + "://" + _cfg("domain"),
                 your_name = _cfg("your-name"),
-                amount = currency.amount("{:.2f}".format(amount / 100))
+                amount = currency.amount("{:.2f}".format(donation.amount / 100))
     ))
     message['Subject'] = "Your monthly donation was declined."
     message['From'] = _cfg("smtp-from")
@@ -84,7 +84,7 @@ def send_new_donation(user, donation):
                 user = user,
                 root = _cfg("protocol") + "://" + _cfg("domain"),
                 your_name = _cfg("your-name"),
-                amount = currency.amount("{:.2f}".format(amount / 100)),
+                amount = currency.amount("{:.2f}".format(donation.amount / 100)),
                 frequency = (" per month"
                     if donation.type == DonationType.monthly else ""),
                 comment = donation.comment or ""
@@ -107,7 +107,7 @@ def send_cancellation_notice(user, donation):
                 user = user,
                 root = _cfg("protocol") + "://" + _cfg("domain"),
                 your_name = _cfg("your-name"),
-                amount = currency.amount("{:.2f}".format(amount / 100)),
+                amount = currency.amount("{:.2f}".format(donation.amount / 100)),
     ))
     message['Subject'] = "A monthly donation on ShleePay has been cancelled"
     message['From'] = _cfg("smtp-from")
