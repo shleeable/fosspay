@@ -3,10 +3,10 @@
 # You can include a path in the domain if it's a subdirectory
 # i.e. domain=drewdevault.com/donate
 # omit the trailing slash
-protocol=http
-domain=localhost:5000
-# Change this value to something random and secret
-secret-key=hello world
+protocol=https
+domain=donate.domain.com
+# Generate a secure value using `openssl rand -base64 45`
+secret-key=gfbtDKbi2vih3CkVtXmmXq5weaKtvFilSFbFx+s1wQ52r0JjL+k9nmR4Htbp
 
 # On the debug server, this lets you choose what to bind to
 debug-host=0.0.0.0
@@ -25,7 +25,7 @@ your-email=joe@example.org
 # ^ you should have a gravatar that works with this email
 
 # SQL connection string
-connection-string=postgresql://postgres@localhost/fosspay
+connection-string=postgresql://postgres:postgres@postgres/postgres
 
 # Stripe API info: https://dashboard.stripe.com/account/apikeys
 stripe-secret=
@@ -50,7 +50,8 @@ public-income=yes
 # How much are you hoping to earn monthly, in cents
 goal=500
 
-# Optional Patreon integration
+
+## Optional Patreon integration
 # Register a client here: https://www.patreon.com/portal/registration/register-clients
 # And put in the "Creator's Access Token" here:
 patreon-access-token=
@@ -63,13 +64,11 @@ patreon-client-secret=
 # And the Patreon campaign you want to connect with:
 patreon-campaign=
 
-# Optional LiberaPay integration, fill in your username here
+## Optional LiberaPay integration
+#fill in your username here
 liberapay-campaign=
 
-# Optional GitHub sponsors integration
+## Optional GitHub sponsors integration
 # Generate personal access key at https://github.com/settings/tokens
 # Must have "user" access.
 github-token=
-
-# Command to reload fosspay (send it a SIGHUP)
-reload-command=kill -HUP $(pgrep -xf '/usr/bin/python3.*app.py' | tail -n 1)
