@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
+from fosspay.app import app
 from fosspay.objects import *
 from fosspay.database import db
 from fosspay.config import _cfg
 from fosspay.email import send_thank_you, send_declined
+from fosspay.currency import currency
 
 from datetime import datetime, timedelta
 
@@ -10,9 +12,11 @@ import requests
 import stripe
 import subprocess
 
-stripe.api_key = _cfg("stripe-secret")
+with app.app_context():    
+    stripe.api_key = _cfg("stripe-secret")
 
-print("Processing monthly donations at " + str(datetime.utcnow()))
+# Date in global standard
+print("Processing monthly donations @ {}".format(datetime.now().strftime('%d-%m-%Y %H:%M:%S')))
 
 donations = Donation.query \
     .filter(Donation.type == DonationType.monthly) \
@@ -29,7 +33,7 @@ for donation in donations:
         try:
             charge = stripe.Charge.create(
                 amount=donation.amount,
-                currency="usd",
+                currency=_cfg("currency"),
                 customer=user.stripe_customer,
                 description="Donation to " + _cfg("your-name")
             )
@@ -47,7 +51,7 @@ for donation in donations:
     else:
         print("Skipping {}".format(donation))
 
-print("{} records processed.".format(len(donations)))
+print("{} records processed.\n".format(len(donations)))
 
 if _cfg("patreon-refresh-token"):
     print("Updating Patreon API token")

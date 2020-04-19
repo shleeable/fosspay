@@ -63,13 +63,8 @@
                 <tbody>
                     {% for project in projects %}
                     <tr>
-                        <td>
-                          <form method="POST" action="/delete-project">
-                            <input type="hidden" name="id" value="{{ project.id }}" />
-                            <button type="submit" value="Delete" class="close">&times;</button>
-                          </form>
-                        </td>
-                        <td>{{ project.name }}</td>
+                        <td><form method="POST" action="{{root}}/delete-project" onSubmit="if(!confirm('Are you sure you want to delete project &quot;{{ project.name }}&quot; ?\nOrphaned donations will be associated with &quot;(not specified)&quot; project.\nWarning: This action is irreversible!')){return false;}"><input type="hidden" name="id" value="{{ project.id }}" /><input type="submit" value="&#xe014;" class="btn btn-default pull-right glyphicon" title="Delete project" /></form></td>
+                        <td><form method="POST" action="{{root}}/edit-project"><input class="form-control" type="text" placeholder="{{ project.name }}" value="{{ project.name }}" name="edit-name" /> <input type="hidden" name="id" value=""{{ project.id }}" /></form></td>
                         <td>{{ currency.amount("{:.2f}".format(one_times(project) / 100)) }}</td>
                         <td>{{ currency.amount("{:.2f}".format(recurring(project) / 100)) }}</td>
                         <td>{{ currency.amount("{:.2f}".format(recurring_ever(project) / 100)) }}</td>
@@ -119,7 +114,7 @@
         <tbody>
             {% for donation in donations %}
             <tr>
-                <td>{{ donation.created.strftime("%Y-%m-%d") }}</td>
+                <td>{{ donation.created.strftime(_("%%Y-%%m-%%d")) }}</td>
                 <td><a href="mailto:{{ donation.user.email }}">{{ donation.user.email }}</a></td>
                 <td>{{ donation.project.name if donation.project else "" }}</td>
                 <td title="{{ donation.comment }}">{{ donation.comment if donation.comment else "" }}</td>
