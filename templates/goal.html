@@ -1,4 +1,10 @@
 {% if _cfg("public-income") == "yes" %}
+<h3>Goal: 
+{{ currency.amount("{:.2f}".format(total_sum / 100))}}/mo
+ of
+ {{ currency.amount("{:.2f}".format(goal / 100)) }}/mo
+ goal
+</h3>
 <div class="container" style="padding-top: 5rem">
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
@@ -92,19 +98,6 @@
           </a></strong> ({{ gh_count }} supporter{{ "s" if lp_count != 1 else "" }})
       </p>
       {% endif %}
-      {% endif %}
-      {% if goal %}
-      <p class="{{ "text-center" if not patreon_sum else "" }}">
-        {{ currency.amount("{:.2f}".format(total_sum / 100))}}/mo
-        of
-        {{ currency.amount("{:.2f}".format(goal / 100)) }}/mo
-        goal
-      </p>
-      {% else %}
-      <p>
-        Supported with {{ currency.amount("{:.2f}".format(total_sum / 100)) }}
-        from {{ total_count }} supporters!
-      </p>
       {% endif %}
     </div>
   </div>
