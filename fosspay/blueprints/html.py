@@ -8,6 +8,7 @@ from fosspay.config import _cfg, load_config
 from fosspay.email import send_thank_you, send_password_reset
 from fosspay.email import send_new_donation, send_cancellation_notice
 from fosspay.currency import currency
+from fosspay.versioning import version
 
 import os
 import locale
@@ -114,7 +115,7 @@ def index():
             patreon_count=patreon_count, patreon_sum=patreon_sum,
             lp_count=lp_count, lp_sum=lp_sum,
             gh_count=gh_count, gh_sum=gh_sum, gh_user=gh_user,
-            currency=currency)
+            currency=currency, version=version())
 
 @html.route("/setup", methods=["POST"])
 def setup():
