@@ -32,26 +32,28 @@ You will need a number of things set up before you start:
 * Install Docker, and Docker-Compose.
 
 * Clone the git repository on the server that you want to host shleepay on:
-
 ```
     git clone git://github.com/shleeable/shleepay.git
     cd shleepay
 ```
 
 * Create and edit the configuration file:
-
 ```
     cp config.ini.docker config.ini
     vim config.ini
 ```
 
 * Build and start shleepay using docker-compose
-
 ```
     docker-compose build
     docker-compose up -d
 ```
-    
+
+* Setup Crontab
+```
+    x x x x x docker-compose run --rm fosspay python3 /usr/src/app/cronjob.py
+```
+
 * Setup nginx reverse proxy with HTTPS TLS - see `contrib/nginx.conf`
 * Setup DNS.
 
