@@ -28,7 +28,7 @@ def index():
         load_config()
         return render_template("setup.html")
     projects = sorted(Project.query.all(), key=lambda p: p.name)
-    avatar = "//www.gravatar.com/avatar/" + hashlib.md5(_cfg("your-email").encode("utf-8")).hexdigest()
+    avatar = os.path.join('static/logo.png')
     selected_project = request.args.get("project")
     if selected_project:
         try:
