@@ -63,7 +63,12 @@
                 <tbody>
                     {% for project in projects %}
                     <tr>
-                        <td><button type="button" class="close">&times;</button></td>
+                        <td>
+                          <form method="POST" action="/delete-project">
+                            <input type="hidden" name="id" value="{{ project.id }}" />
+                            <button type="submit" value="Delete" class="close">&times;</button>
+                          </form>
+                        </td>
                         <td>{{ project.name }}</td>
                         <td>{{ currency.amount("{:.2f}".format(one_times(project) / 100)) }}</td>
                         <td>{{ currency.amount("{:.2f}".format(recurring(project) / 100)) }}</td>

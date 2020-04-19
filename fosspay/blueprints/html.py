@@ -162,6 +162,17 @@ def create_project():
     db.commit()
     return redirect("admin")
 
+
+@html.route("/delete-project", methods=["POST"])
+@adminrequired
+def delete_project():
+    id = request.form.get("id")
+    project = Project.query.get(id)
+    db.delete(project)
+    db.commit()
+    return redirect("admin")
+
+
 @html.route("/login", methods=["GET", "POST"])
 def login():
     if current_user:
