@@ -8,6 +8,7 @@ from fosspay.config import _cfg, load_config
 from fosspay.email import send_thank_you, send_password_reset
 from fosspay.email import send_new_donation, send_cancellation_notice
 from fosspay.currency import currency
+from fosspay.versioning import version
 
 import os
 import locale
@@ -16,6 +17,7 @@ import hashlib
 import stripe
 import binascii
 import requests
+import sqlalchemy
 
 encoding = locale.getdefaultlocale()[1]
 html = Blueprint('html', __name__, template_folder='../../templates')
@@ -26,7 +28,7 @@ def index():
         load_config()
         return render_template("setup.html")
     projects = sorted(Project.query.all(), key=lambda p: p.name)
-    avatar = "//www.gravatar.com/avatar/" + hashlib.md5(_cfg("your-email").encode("utf-8")).hexdigest()
+    avatar = os.path.join('static/logo.png')
     selected_project = request.args.get("project")
     if selected_project:
         try:
@@ -113,7 +115,7 @@ def index():
             patreon_count=patreon_count, patreon_sum=patreon_sum,
             lp_count=lp_count, lp_sum=lp_sum,
             gh_count=gh_count, gh_sum=gh_sum, gh_user=gh_user,
-            currency=currency)
+            currency=currency, version=version())
 
 @html.route("/setup", methods=["POST"])
 def setup():
@@ -162,16 +164,23 @@ def create_project():
     db.commit()
     return redirect("admin")
 
+@html.route("/edit-project", methods=["POST"])
+@adminrequired
+def edit_project():
+    name = request.form["edit-name"]
+    id = request.form["id"]
+    db.query(Project).filter(Project.id == id).update({"name": name})
+    db.commit()
+    return redirect("admin")
 
 @html.route("/delete-project", methods=["POST"])
 @adminrequired
 def delete_project():
-    id = request.form.get("id")
-    project = Project.query.get(id)
-    db.delete(project)
+    id = request.form["id"]
+    db.query(Donation).filter(Donation.project_id == id).update({"project_id": sqlalchemy.sql.null()})
+    db.query(Project).filter(Project.id == id).delete()
     db.commit()
     return redirect("admin")
-
 
 @html.route("/login", methods=["GET", "POST"])
 def login():
@@ -258,7 +267,7 @@ def donate():
         db.close()
         return { "success": False, "reason": "Your card was declined." }
 
-    transaction = stripe.BalanceTransaction.retrieve(charge.balance_transaction);
+    transaction = stripe.BalanceTransaction.retrieve(charge.balance_transaction)
 
     donation = Donation(user, type, transaction.net, project, comment)
     db.add(donation)
@@ -328,7 +337,9 @@ def reset_password(token):
 def panel():
     return render_template("panel.html",
         one_times=lambda u: [d for d in u.donations if d.type == DonationType.one_time],
-        recurring=lambda u: [d for d in u.donations if d.type == DonationType.monthly and d.active],
+        recurring=lambda u: [d for d in u.donations if d.type == DonationType.monthly],
+        recurring_active=lambda u: [d for d in u.donations if d.type == DonationType.monthly and d.active],
+        recurring_inactive=lambda u: [d for d in u.donations if d.type == DonationType.monthly and not d.active],
         currency=currency)
 
 @html.route("/cancel/<id>", methods=["POST"])

@@ -20,31 +20,8 @@
     {% if first %}
     <div class="well">
         <p>
-            You're set up and ready to go! This is your admin panel. Next steps:
+            You're set up and ready to go! This is your admin panel.
         </p>
-        <ol>
-            <li>
-                <strong>Set up a cron job to handle monthly donations.</strong>
-                <a href="https://github.com/ddevault/fosspay/wiki/Recurring-donations-cronjob">
-                    Relevant documentation
-                </a>.
-            </li>
-            <li>
-                Add some projects. Donors can tell you which project they want to support
-                when they donate.
-            </li>
-            <li>
-                Customize the look &amp; feel. Look at the contents of the <code>templates</code>
-                directory - you can copy and paste any of these templates into the
-                <code>overrides</code> directory and change it to suit your needs.
-            </li>
-            <li>
-                <a href="https://drewdevault.com/donate?project=fosspay">Donate to fosspay upstream</a>?
-            </li>
-            <li>
-                <a href="https://github.com/ddevault/fosspay">Contribute code to fosspay upstream</a>?
-            </li>
-        </ol>
     </div>
     {% endif %}
     <h2>Projects</h2>
@@ -63,13 +40,8 @@
                 <tbody>
                     {% for project in projects %}
                     <tr>
-                        <td>
-                          <form method="POST" action="/delete-project">
-                            <input type="hidden" name="id" value="{{ project.id }}" />
-                            <button type="submit" value="Delete" class="close">&times;</button>
-                          </form>
-                        </td>
-                        <td>{{ project.name }}</td>
+                        <td><form method="POST" action="{{root}}/delete-project" onSubmit="if(!confirm('Are you sure you want to delete project &quot;{{ project.name }}&quot; ?\nOrphaned donations will be associated with &quot;(not specified)&quot; project.\nWarning: This action is irreversible!')){return false;}"><input type="hidden" name="id" value="{{ project.id }}" /><input type="submit" value="&#xe014;" class="btn btn-default pull-right glyphicon" title="Delete project" /></form></td>
+                        <td><form method="POST" action="{{root}}/edit-project"><input class="form-control" type="text" placeholder="{{ project.name }}" value="{{ project.name }}" name="edit-name" /> <input type="hidden" name="id" value="{{ project.id }}" /></form></td>
                         <td>{{ currency.amount("{:.2f}".format(one_times(project) / 100)) }}</td>
                         <td>{{ currency.amount("{:.2f}".format(recurring(project) / 100)) }}</td>
                         <td>{{ currency.amount("{:.2f}".format(recurring_ever(project) / 100)) }}</td>

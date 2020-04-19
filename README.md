@@ -1,4 +1,4 @@
-# shleepay-fosspay
+# ShleePay
 *fosspay fork*
 
 Donation collection for FOSS groups and individuals.
@@ -25,7 +25,7 @@ You will need a number of things set up before you start:
 1. An approved [Stripe](https://stripe.com/) account
 1. A mail server
 1. A domain name and an SSL certificate
-1. A web server to host fosspay on
+1. A web server to host ShleePay on
 
 ## Installation
 
@@ -51,7 +51,7 @@ You will need a number of things set up before you start:
 
 * Setup Crontab
 ```
-    * * * * * cd /path-to-your-project && docker-compose run --rm fosspay python3 /usr/src/app/cronjob.py >> /dev/null 2>&1 && docker-compose restart fosspay
+    * * * * * cd /path-to-your-project && docker-compose run --rm ShleePay python3 /usr/src/app/cronjob.py >> /dev/null 2>&1 && docker-compose restart ShleePay
 ```
 
 * Setup nginx reverse proxy with HTTPS TLS - see `contrib/nginx.conf`

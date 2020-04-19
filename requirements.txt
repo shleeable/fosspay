@@ -3,9 +3,8 @@ Flask
 Jinja2
 Flask-Misaka
 Flask-Login
-psycopg2
 bcrypt
 gunicorn
 sqlalchemy-utils
-pystache
 patreon
+psycopg2  # postgres
