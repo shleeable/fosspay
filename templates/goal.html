@@ -1,4 +1,23 @@
 {% if _cfg("public-income") == "yes" %}
+
+{% set total_sum = recurring_sum + patreon_sum + lp_sum + gh_sum %}
+{% set total_count = recurring_count + patreon_count + lp_count + gh_count %}
+{% if _cfg("goal") %}
+{% set goal = int(_cfg("goal")) %}
+
+{% if goal < total_sum %}
+{# Make the graph still make sense if we exceeded the goal #}
+{% set adjusted_goal = total_sum %}
+{% else %}
+{% set adjusted_goal = goal %}
+{% endif %}
+
+{% set recurring_progress = recurring_sum / adjusted_goal %}
+{% set patreon_progress = patreon_sum / adjusted_goal %}
+{% set lp_progress = lp_sum / adjusted_goal %}
+{% set gh_progress = gh_sum / adjusted_goal %}
+{% set progress = total_sum / goal %}
+
 <h3>Goal: 
 {{ currency.amount("{:.2f}".format(total_sum / 100))}}/mo
  of
@@ -8,23 +27,6 @@
 <div class="container" style="padding-top: 5rem">
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
-      {% set total_sum = recurring_sum + patreon_sum + lp_sum + gh_sum %}
-      {% set total_count = recurring_count + patreon_count + lp_count + gh_count %}
-      {% if _cfg("goal") %}
-      {% set goal = int(_cfg("goal")) %}
-
-      {% if goal < total_sum %}
-      {# Make the graph still make sense if we exceeded the goal #}
-      {% set adjusted_goal = total_sum %}
-      {% else %}
-      {% set adjusted_goal = goal %}
-      {% endif %}
-
-      {% set recurring_progress = recurring_sum / adjusted_goal %}
-      {% set patreon_progress = patreon_sum / adjusted_goal %}
-      {% set lp_progress = lp_sum / adjusted_goal %}
-      {% set gh_progress = gh_sum / adjusted_goal %}
-      {% set progress = total_sum / goal %}
       <div class="progress" style="height: 3rem">
         <div
           class="progress-bar progress-bar-primary"
