@@ -41,7 +41,7 @@
                     <td>(canceled)</td>
                     <td>{{ donation.created.strftime("%Y-%m-%d") }}</td>
                     <td>{{ currency.amount("{:.2f}".format(donation.amount / 100)) }}</td>
-                    <td>{{ donation.project.name if donation.project else _("Not specified") }}</td>
+                    <td>{{ donation.project.name if donation.project else "Not specified" }}</td>
                     <td>{{donation.payments}}</td>    
             </tr>
         {% endfor %}
