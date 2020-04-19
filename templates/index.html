@@ -153,10 +153,12 @@ window.email = "{{user.email}}";
 <div class="container text-center">
     {% if not user %}
     <p>
-        <small class="text-muted">
           Been here before? <a href="login">Log in</a> to view your donation
           history, edit recurring donations, and so on. :)
-        </small>
+    </p>
+    {% elif user.admin %}
+    <p>
+            Access <a href="admin">admin panel</a>.
     </p>
     {% else %}
     <p>
