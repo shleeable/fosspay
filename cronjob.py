@@ -3,6 +3,7 @@ from fosspay.objects import *
 from fosspay.database import db
 from fosspay.config import _cfg
 from fosspay.email import send_thank_you, send_declined
+from fosspay.currency import currency
 
 from datetime import datetime, timedelta
 
@@ -29,7 +30,7 @@ for donation in donations:
         try:
             charge = stripe.Charge.create(
                 amount=donation.amount,
-                currency="usd",
+                currency=_cfg("currency"),
                 customer=user.stripe_customer,
                 description="Donation to " + _cfg("your-name")
             )
