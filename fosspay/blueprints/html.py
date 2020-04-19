@@ -16,6 +16,7 @@ import hashlib
 import stripe
 import binascii
 import requests
+import sqlalchemy
 
 encoding = locale.getdefaultlocale()[1]
 html = Blueprint('html', __name__, template_folder='../../templates')
@@ -162,16 +163,23 @@ def create_project():
     db.commit()
     return redirect("admin")
 
+@html.route("/edit-project", methods=["POST"])
+@adminrequired
+def edit_project():
+    name = request.form["edit-name"]
+    id = request.form["id"]
+    db.query(Project).filter(Project.id == id).update({"name": name})
+    db.commit()
+    return redirect("admin")
 
 @html.route("/delete-project", methods=["POST"])
 @adminrequired
 def delete_project():
-    id = request.form.get("id")
-    project = Project.query.get(id)
-    db.delete(project)
+    id = request.form["id"]
+    db.query(Donation).filter(Donation.project_id == id).update({"project_id": sqlalchemy.sql.null()})
+    db.query(Project).filter(Project.id == id).delete()
     db.commit()
     return redirect("admin")
-
 
 @html.route("/login", methods=["GET", "POST"])
 def login():

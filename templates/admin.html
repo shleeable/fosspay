@@ -63,13 +63,8 @@
                 <tbody>
                     {% for project in projects %}
                     <tr>
-                        <td>
-                          <form method="POST" action="/delete-project">
-                            <input type="hidden" name="id" value="{{ project.id }}" />
-                            <button type="submit" value="Delete" class="close">&times;</button>
-                          </form>
-                        </td>
-                        <td>{{ project.name }}</td>
+                        <td><form method="POST" action="{{root}}/delete-project" onSubmit="if(!confirm('Are you sure you want to delete project &quot;{{ project.name }}&quot; ?\nOrphaned donations will be associated with &quot;(not specified)&quot; project.')){return false;}"><input type="hidden" name="id" value="{{ project.id }}" /><input type="submit" value="Delete" class="btn btn-default pull-right" /></form></td>
+                        <td><form method="POST" action="{{root}}/edit-project"><input class="form-control" type="text" placeholder="{{ project.name }}" value="{{ project.name }}" name="edit-name" /> <input type="hidden" name="id" value=""{{ project.id }}" /></form></td>
                         <td>{{ currency.amount("{:.2f}".format(one_times(project) / 100)) }}</td>
                         <td>{{ currency.amount("{:.2f}".format(recurring(project) / 100)) }}</td>
                         <td>{{ currency.amount("{:.2f}".format(recurring_ever(project) / 100)) }}</td>
