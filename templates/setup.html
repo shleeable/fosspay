@@ -1,17 +1,27 @@
 {% extends "layout.html" %}
 {% block container %}
-    <h1>FossPay Setup</h1>
-    <p>Congrats! You have FossPay up and running.</p>
+    <h1>ShleePay Setup</h1>
+    <p>Congrats! You have ShleePay up and running.</p>
 
     <h2>config.ini</h2>
     <ul class="list-unstyled">
         <li>
-            {% if _cfg("secret-key") == "hello world" %}
+            {% if _cfg("secret-key") == "ReplaceMe" %}
                 <span class="glyphicon glyphicon-remove text-danger"></span>
                 You need to change the secret key to something other than "hello world".
             {% else %}
                 <span class="glyphicon glyphicon-ok text-success"></span>
                 Your secret key looks good.
+            {% endif %}
+        </li>
+
+        <li>
+            {% if _cfg("protocol") == "http" %}
+                <span class="glyphicon glyphicon-remove text-danger"></span>
+                You should enable HTTPS over TLS on your domain. Required by Stripe.
+            {% else %}
+                <span class="glyphicon glyphicon-ok text-success"></span>
+                Your protocol is set to "{{ _cfg("protocol") }}".
             {% endif %}
         </li>
 
