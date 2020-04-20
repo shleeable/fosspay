@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import sys
+
 from fosspay.app import app
 from fosspay.objects import *
 from fosspay.database import db
@@ -10,7 +12,6 @@ from datetime import datetime, timedelta
 
 import requests
 import stripe
-import subprocess
 
 with app.app_context():
     stripe.api_key = _cfg("stripe-secret")

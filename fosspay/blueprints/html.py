@@ -140,7 +140,7 @@ def setup():
 def admin():
     first = request.args.get("first-run") is not None
     projects = Project.query.all()
-    unspecified = Donation.query.filter(Donation.project == None).all()
+    unspecified = Donation.query.filter(Donation.project is None).all()
     donations = Donation.query.order_by(Donation.created.desc()).limit(50).all()
     return render_template("admin.html",
                            first=first,
@@ -332,13 +332,13 @@ def reset_password(token):
         return render_template("reset.html", errors="This link has expired.")
 
     if request.method == 'GET':
-        if user.password_reset_expires == None or user.password_reset_expires < datetime.now():
+        if user.password_reset_expires is None or user.password_reset_expires < datetime.now():
             return render_template("reset.html", errors="This link has expired.")
         if user.password_reset != token:
             redirect("..")
         return render_template("reset.html", token=token)
     else:
-        if user.password_reset_expires == None or user.password_reset_expires < datetime.now():
+        if user.password_reset_expires is None or user.password_reset_expires < datetime.now():
             abort(401)
         if user.password_reset != token:
             abort(401)

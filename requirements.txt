@@ -8,3 +8,7 @@ gunicorn
 sqlalchemy-utils
 patreon
 psycopg2  # postgres
+
+werkzeug
+requests
+sqlalchemy

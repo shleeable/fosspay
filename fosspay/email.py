@@ -84,7 +84,7 @@ def send_new_donation(user, donation):
     smtp.ehlo()
     smtp.starttls()
     smtp.login(_cfg("smtp-user"), _cfg("smtp-password"))
-    message = MIMEText(render_template("emails/new_donation-you",
+    message = MIMEText(render_template("emails/new_donation",
                                        user=user,
                                        root=_cfg("protocol") + "://" + _cfg("domain"),
                                        your_name=_cfg("your-name"),

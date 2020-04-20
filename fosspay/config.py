@@ -1,11 +1,6 @@
 import logging
 import signal
-
-try:
-    from configparser import ConfigParser
-except ImportError:
-    # Python 2 support
-    from ConfigParser import ConfigParser
+from configparser import ConfigParser
 
 logger = logging.getLogger("fosspay")
 logger.setLevel(logging.DEBUG)
@@ -27,11 +22,11 @@ config = None
 def load_config():
     global config
     config = ConfigParser()
-    config.readfp(open('config.ini'))
+    config.read_file(open('config.ini'))
     try:
         signal.signal(signal.SIGHUP, lambda *args: load_config())
     except ValueError as e:
-        logger.warn(e)
+        logger.warning(e)
 
 
 load_config()
