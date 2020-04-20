@@ -1,109 +1,109 @@
 {% if _cfg("public-income") == "yes" %}
 
-{% set total_sum = recurring_sum + patreon_sum + lp_sum + gh_sum %}
-{% set total_count = recurring_count + patreon_count + lp_count + gh_count %}
-{% if _cfg("goal") %}
-{% set goal = int(_cfg("goal")) %}
+    {% set total_sum = recurring_sum + patreon_sum + lp_sum + gh_sum %}
+    {% set total_count = recurring_count + patreon_count + lp_count + gh_count %}
+    {% if _cfg("goal") %}
+        {% set goal = int(_cfg("goal")) %}
 
-{% if goal < total_sum %}
-{# Make the graph still make sense if we exceeded the goal #}
-{% set adjusted_goal = total_sum %}
-{% else %}
-{% set adjusted_goal = goal %}
-{% endif %}
+        {% if goal < total_sum %}
+            {# Make the graph still make sense if we exceeded the goal #}
+            {% set adjusted_goal = total_sum %}
+        {% else %}
+            {% set adjusted_goal = goal %}
+        {% endif %}
 
-{% set recurring_progress = recurring_sum / adjusted_goal %}
-{% set patreon_progress = patreon_sum / adjusted_goal %}
-{% set lp_progress = lp_sum / adjusted_goal %}
-{% set gh_progress = gh_sum / adjusted_goal %}
-{% set progress = total_sum / goal %}
-<hr />
-  <div class="row">
-    <h3 class="text-center">Goal: 
-      {{ currency.amount("{:.2f}".format(total_sum / 100))}}
-       of
-       {{ currency.amount("{:.2f}".format(goal / 100)) }}/month
-    </h3>
+        {% set recurring_progress = recurring_sum / adjusted_goal %}
+        {% set patreon_progress = patreon_sum / adjusted_goal %}
+        {% set lp_progress = lp_sum / adjusted_goal %}
+        {% set gh_progress = gh_sum / adjusted_goal %}
+        {% set progress = total_sum / goal %}
+        <hr/>
+        <div class="row">
+        <h3 class="text-center">Goal:
+            {{ currency.amount("{:.2f}".format(total_sum / 100)) }}
+            of
+            {{ currency.amount("{:.2f}".format(goal / 100)) }}/month
+        </h3>
 
-    <div class="col-md-8 col-md-offset-2">
-      <div class="progress" style="height: 3rem">
-        <div
-          class="progress-bar progress-bar-primary"
-          style="width: {{ recurring_progress * 100 }}%; line-height: 2.5"
-        >
-          <span>{{ currency.amount("{:.0f}".format(recurring_sum / 100)) }}</span>
+        <div class="col-md-8 col-md-offset-2">
+        <div class="progress" style="height: 3rem">
+            <div
+                    class="progress-bar progress-bar-primary"
+                    style="width: {{ recurring_progress * 100 }}%; line-height: 2.5"
+            >
+                <span>{{ currency.amount("{:.0f}".format(recurring_sum / 100)) }}</span>
+            </div>
+
+            <div
+                    class="progress-bar progress-bar-info"
+                    style="width: {{ patreon_progress * 100 }}%; line-height: 2.5"
+            >
+                <span>{{ currency.amount("{:.0f}".format(patreon_sum / 100)) }}</span>
+            </div>
+
+            <div
+                    class="progress-bar progress-bar-warning"
+                    style="width: {{ lp_progress * 100 }}%; line-height: 2.5"
+            >
+                <span>{{ currency.amount("{:.0f}".format(lp_sum / 100)) }}</span>
+            </div>
+
+            <div
+                    class="progress-bar progress-bar-primary"
+                    style="width: {{ gh_progress * 100 }}%; line-height: 2.5"
+            >
+                <span>{{ currency.amount("{:.0f}".format(gh_sum / 100)) }}</span>
+            </div>
         </div>
-
-        <div
-          class="progress-bar progress-bar-info"
-          style="width: {{ patreon_progress * 100 }}%; line-height: 2.5"
-        >
-          <span>{{ currency.amount("{:.0f}".format(patreon_sum / 100)) }}</span>
+    {% endif %}
+</div>
+</div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <p>
+                {{ currency.amount("{:.2f}".format(recurring_sum / 100)) }}/mo
+                via <strong class="text-primary">{{ domain }}</strong>
+                ({{ recurring_count }} supporter{{ "s" if recurring_count != 1 else "" }})
+            </p>
+            {% if patreon_count %}
+                <p>
+                    {{ currency.amount("{:.2f}".format(patreon_sum / 100)) }}/mo
+                    via
+                    <strong><a
+                            href="https://patreon.com/{{ _cfg("patreon-campaign") }}"
+                            style="color: #51acc7">
+                        Patreon <i class="glyphicon glyphicon-share"></i>
+                    </a></strong> ({{ patreon_count }} supporter{{ "s" if patreon_count != 1 else "" }})
+                </p>
+            {% endif %}
+            {% if lp_count %}
+                <p>
+                    {{ currency.amount("{:.2f}".format(lp_sum / 100)) }}/mo
+                    via
+                    <strong><a
+                            class="text-warning"
+                            href="https://liberapay.com/{{ _cfg("liberapay-campaign") }}">
+                        Liberapay <i class="glyphicon glyphicon-share"></i>
+                    </a></strong> ({{ lp_count }} supporter{{ "s" if lp_count != 1 else "" }})
+                </p>
+            {% endif %}
+            {% if gh_count %}
+                <p>
+                    {{ currency.amount("{:.2f}".format(gh_sum / 100)) }}/mo
+                    via
+                    <strong><a
+                            class="text-primary"
+                            href="https://github.com/{{ gh_user }}">
+                        GitHub <i class="glyphicon glyphicon-share"></i>
+                    </a></strong> ({{ gh_count }} supporter{{ "s" if lp_count != 1 else "" }})
+                </p>
+            {% endif %}
         </div>
-
-        <div
-          class="progress-bar progress-bar-warning"
-          style="width: {{ lp_progress * 100 }}%; line-height: 2.5"
-        >
-          <span>{{ currency.amount("{:.0f}".format(lp_sum / 100)) }}</span>
-        </div>
-
-        <div
-          class="progress-bar progress-bar-primary"
-          style="width: {{ gh_progress * 100 }}%; line-height: 2.5"
-        >
-          <span>{{ currency.amount("{:.0f}".format(gh_sum / 100)) }}</span>
-        </div>
-      </div>
-      {% endif %}
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">
-      <p>
-        {{ currency.amount("{:.2f}".format(recurring_sum / 100)) }}/mo
-        via <strong class="text-primary">{{ domain }}</strong>
-        ({{ recurring_count }} supporter{{ "s" if recurring_count != 1 else "" }})
-      </p>
-      {% if patreon_count %}
-      <p>
-        {{ currency.amount("{:.2f}".format(patreon_sum / 100)) }}/mo
-        via
-        <strong><a
-          href="https://patreon.com/{{ _cfg("patreon-campaign") }}"
-          style="color: #51acc7">
-            Patreon <i class="glyphicon glyphicon-share"></i>
-          </a></strong> ({{ patreon_count }} supporter{{ "s" if patreon_count != 1 else "" }})
-      </p>
-      {% endif %}
-      {% if lp_count %}
-      <p>
-        {{ currency.amount("{:.2f}".format(lp_sum / 100)) }}/mo
-        via
-        <strong><a
-          class="text-warning"
-          href="https://liberapay.com/{{ _cfg("liberapay-campaign") }}">
-            Liberapay <i class="glyphicon glyphicon-share"></i>
-          </a></strong> ({{ lp_count }} supporter{{ "s" if lp_count != 1 else "" }})
-      </p>
-      {% endif %}
-      {% if gh_count %}
-      <p>
-        {{ currency.amount("{:.2f}".format(gh_sum / 100)) }}/mo
-        via
-        <strong><a
-          class="text-primary"
-          href="https://github.com/{{gh_user}}">
-            GitHub <i class="glyphicon glyphicon-share"></i>
-          </a></strong> ({{ gh_count }} supporter{{ "s" if lp_count != 1 else "" }})
-      </p>
-      {% endif %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            {% include "goal-summary.html" %}
+        </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">
-      {% include "goal-summary.html" %}
-    </div>
-  </div>
 
 {% endif %}

@@ -1,60 +1,60 @@
 {% extends "layout.html" %}
 {% block scripts %}
-<script>
-window.stripe_key = "{{ _cfg("stripe-publish") }}";
-window.your_name = "{{ _cfg("your-name") }}";
-window.amount = {{invoice.amount}};
-window.invoice = "{{invoice.external_id}}";
-window.comment = "{{invoice.comment}}";
-const currency = "{{ _cfg("currency") }}";
-</script>
-<script src="//checkout.stripe.com/checkout.js"></script>
-<script src="../static/invoice.js"></script>
+    <script>
+        window.stripe_key = "{{ _cfg("stripe-publish") }}";
+        window.your_name = "{{ _cfg("your-name") }}";
+        window.amount = {{invoice.amount}};
+        window.invoice = "{{invoice.external_id}}";
+        window.comment = "{{invoice.comment}}";
+        const currency = "{{ _cfg("currency") }}";
+    </script>
+    <script src="//checkout.stripe.com/checkout.js"></script>
+    <script src="../static/invoice.js"></script>
 {% endblock %}
-{% block body %} 
-<div class="well">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-              <h1>Invoice to {{ _cfg("your-name") }}</h1>
+{% block body %}
+    <div class="well">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <h1>Invoice to {{ _cfg("your-name") }}</h1>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<noscript>
-  <div class="container">
-    <div class="alert alert-danger">
-      <p>This page requires Javascript. It's necessary to send your credit card number to
-      <a href="https://stripe.com/">Stripe</a> directly.</p>
+    <noscript>
+        <div class="container">
+            <div class="alert alert-danger">
+                <p>This page requires Javascript. It's necessary to send your credit card number to
+                    <a href="https://stripe.com/">Stripe</a> directly.</p>
+            </div>
+        </div>
+    </noscript>
+    <div class="container text-center hidden" id="thanks">
+        <p>Thank you for your payment - it has been processed successfully.</p>
     </div>
-  </div>
-</noscript>
-<div class="container text-center hidden" id="thanks">
-  <p>Thank you for your payment - it has been processed successfully.</p>
-</div>
-<div class="container text-center" id="donation-stuff">
-  <h3>Invoice for ${{"{:.2f}".format(invoice.amount / 100)}}</h3>
-  <div class="row">
-    <div class="col-md-4 col-md-offset-4">
-      <p>
-        {{invoice.comment}}
-      </p>
+    <div class="container text-center" id="donation-stuff">
+        <h3>Invoice for ${{ "{:.2f}".format(invoice.amount / 100) }}</h3>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <p>
+                    {{ invoice.comment }}
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="alert alert-danger hidden" id="errors"><p></p></div>
+                <button class="btn btn-block btn-success" id="submit">
+                    Submit Payment
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4 col-md-offset-4">
-      <div class="alert alert-danger hidden" id="errors"><p></p></div>
-      <button class="btn btn-block btn-success" id="submit">
-        Submit Payment
-      </button>
+    <div class="container text-center">
+        <p>
+            <small class="text-muted">
+                Powered by <a href="https://github.com/shleeable/shleepay">ShleePay</a>.
+            </small>
+        </p>
     </div>
-  </div>
-</div>
-<div class="container text-center">
-  <p>
-    <small class="text-muted">
-      Powered by <a href="https://github.com/shleeable/shleepay">ShleePay</a>.
-    </small>
-  </p>
-</div>
 {% endblock %}

@@ -3,10 +3,11 @@
 # You can include a path in the domain if it's a subdirectory
 # i.e. domain=drewdevault.com/donate
 # omit the trailing slash
-protocol=https
-domain=donate.domain.com
+protocol=http
+domain=localhost:5000
+
 # Generate a secure value using `openssl rand -base64 45`
-secret-key=gfbtDKbi2vih3CkVtXmmXq5weaKtvFilSFbFx+s1wQ52r0JjL+k9nmR4Htbp
+secret-key=ReplaceMe
 
 # On the debug server, this lets you choose what to bind to
 debug-host=0.0.0.0

@@ -13,9 +13,11 @@ import binascii
 import os
 import hashlib
 
+
 class DonationType(Enum):
     one_time = "one_time"
     monthly = "monthly"
+
 
 class User(Base):
     __tablename__ = 'users'
@@ -30,7 +32,7 @@ class User(Base):
 
     def set_password(self, password):
         self.password = bcrypt.hashpw(password.encode("utf-8"),
-                bcrypt.gensalt()).decode("utf-8")
+                                      bcrypt.gensalt()).decode("utf-8")
 
     def __init__(self, email, password):
         self.email = email
@@ -45,12 +47,16 @@ class User(Base):
     # We don't use most of these features
     def is_authenticated(self):
         return True
+
     def is_active(self):
         return True
+
     def is_anonymous(self):
         return False
+
     def get_id(self):
         return self.email
+
 
 class Donation(Base):
     __tablename__ = 'donations'
@@ -83,11 +89,12 @@ class Donation(Base):
 
     def __repr__(self):
         return "<Donation {} from {}: {} ({})>".format(
-                self.id,
-                self.user.email,
-                currency.amount("{:.2f}".format(self.amount / 100)),
-                self.type
-            )
+            self.id,
+            self.user.email,
+            currency.amount("{:.2f}".format(self.amount / 100)),
+            self.type
+        )
+
 
 class Project(Base):
     __tablename__ = 'projects'
@@ -101,6 +108,7 @@ class Project(Base):
 
     def __repr__(self):
         return "<Project {} {}>".format(self.id, self.name)
+
 
 class Invoice(Base):
     __tablename__ = 'invoices'

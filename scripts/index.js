@@ -1,4 +1,4 @@
-(function() {
+(function () {
     var donation = {
         type: window.default_type,
         amount: window.default_amount * 100, // cents
@@ -7,9 +7,9 @@
     };
 
     function formatCents(cents) {
-        var dollars = Math.floor(cents/100);
-        var leftover = Math.floor(cents%100);
-        return String(dollars)+"."+String(leftover+100).substring(1);
+        var dollars = Math.floor(cents / 100);
+        var leftover = Math.floor(cents % 100);
+        return String(dollars) + "." + String(leftover + 100).substring(1);
     }
 
     function updateFee() {
@@ -17,8 +17,8 @@
         amt -= 30;
         amt *= 0.971;
         amt = Math.floor(amt);
-        var fee = donation.amount-amt;
-        var pct = ((fee/donation.amount)*100).toFixed(1);
+        var fee = donation.amount - amt;
+        var pct = ((fee / donation.amount) * 100).toFixed(1);
         document.getElementById("after-fees").textContent = formatCents(amt);
         document.getElementById("fee").textContent = formatCents(fee);
         document.getElementById("fee-pct").textContent = pct;
@@ -58,7 +58,7 @@
         frequencies[i].addEventListener("click", selectFrequency);
     }
 
-    document.getElementById("custom-amount-text").addEventListener("change", function(e) {
+    document.getElementById("custom-amount-text").addEventListener("change", function (e) {
         var value = +e.target.value;
         if (isNaN(value) || value <= 1) {
             value = 1;
@@ -70,7 +70,7 @@
 
     var project = document.getElementById("project")
     if (project) {
-        project.addEventListener("change", function(e) {
+        project.addEventListener("change", function (e) {
             if (e.target.value === "null") {
                 donation.project = null;
             } else {
@@ -79,7 +79,7 @@
         });
     }
 
-    document.getElementById("donate-button").addEventListener("click", function(e) {
+    document.getElementById("donate-button").addEventListener("click", function (e) {
         e.preventDefault();
         if (e.target.getAttribute("disabled")) {
             return;
@@ -97,7 +97,7 @@
             panelLabel: i18n["Donate "] + "{{amount}}",
             amount: donation.amount,
             currency: currency,
-            token: function(token) {
+            token: function (token) {
                 e.target.setAttribute("disabled", "");
                 e.target.textContent = i18n["Submitting..."];
 
@@ -114,7 +114,7 @@
                 }
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "donate");
-                xhr.onload = function() {
+                xhr.onload = function () {
                     var res = JSON.parse(this.responseText);
                     if (res.success) {
                         document.getElementById("donation-stuff").classList.add("hidden");
@@ -138,7 +138,7 @@
         handler.open();
     });
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         updateFee();
     });
 })();

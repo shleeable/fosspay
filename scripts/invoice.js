@@ -1,5 +1,5 @@
-(function() {
-    document.getElementById("submit").addEventListener("click", function(e) {
+(function () {
+    document.getElementById("submit").addEventListener("click", function (e) {
         e.preventDefault();
         if (e.target.getAttribute("disabled")) {
             return;
@@ -12,7 +12,7 @@
             description: "Invoice " + invoice,
             panelLabel: "Pay {{amount}}",
             amount: amount,
-            token: function(token) {
+            token: function (token) {
                 e.target.setAttribute("disabled", "");
                 e.target.textContent = "Submitting...";
 
@@ -24,7 +24,7 @@
                 data.append("comment", comment);
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "../donate");
-                xhr.onload = function() {
+                xhr.onload = function () {
                     var res = JSON.parse(this.responseText);
                     if (res.success) {
                         document.getElementById("donation-stuff").classList.add("hidden");
