@@ -12,7 +12,7 @@ import requests
 import stripe
 import subprocess
 
-with app.app_context():    
+with app.app_context():
     stripe.api_key = _cfg("stripe-secret")
 
 # Date in global standard

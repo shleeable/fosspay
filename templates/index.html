@@ -1,176 +1,180 @@
 {% extends "layout.html" %}
 {% block scripts %}
-<script>
-window.stripe_key = "{{ _cfg("stripe-publish") }}";
-window.avatar = "{{ avatar }}";
-window.your_name = "{{ _cfg("your-name") }}";
-window.default_amount = {{ _cfg("default-amount") }};
-window.default_type = "{{ _cfg("default-type") }}";
+    <script>
+        window.stripe_key = "{{ _cfg("stripe-publish") }}";
+        window.avatar = "{{ avatar }}";
+        window.your_name = "{{ _cfg("your-name") }}";
+        window.default_amount = {{ _cfg("default-amount") }};
+        window.default_type = "{{ _cfg("default-type") }}";
 
-// Array used for translation of index.js sentences. See contrib/fr/overrides/index.html for example use
-const i18n = {
-    "Monthly Donation": "Monthly Donation",
-    "One-time Donation": "One-time Donation",
-    "Donate ": "Donate ",
-    "Submitting...": "Submitting...",
-    "Donate": "Donate"
-};
-// End of translation of index.js
+        // Array used for translation of index.js sentences. See contrib/fr/overrides/index.html for example use
+        const i18n = {
+            "Monthly Donation": "Monthly Donation",
+            "One-time Donation": "One-time Donation",
+            "Donate ": "Donate ",
+            "Submitting...": "Submitting...",
+            "Donate": "Donate"
+        };
+        // End of translation of index.js
 
-const currency = "{{ _cfg("currency") }}";
+        const currency = "{{ _cfg("currency") }}";
 
-{% if user %}
-window.email = "{{user.email}}";
-{% endif %}
-</script>
-<script src="//checkout.stripe.com/checkout.js"></script>
-<script src="static/index.js"></script>
+        {% if user %}
+            window.email = "{{user.email}}";
+        {% endif %}
+    </script>
+    <script src="//checkout.stripe.com/checkout.js"></script>
+    <script src="static/index.js"></script>
 {% endblock %}
-{% block body %} 
-<div class="well">
-    <div class="container">
+{% block body %}
+    <div class="well">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <img
+                            class="pull-right"
+                            src="{{ avatar }}?s=128"
+                            style="border-radius: 5px; margin-left: 1rem"
+                            width="128" height="128"/>
+                    <h1>Donate to {{ _cfg("your-name") }}</h1>
+                    {% include "summary.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <noscript>
+        <div class="container">
+            <div class="alert alert-danger">
+                <p>This page requires Javascript. It's necessary to send your credit card number to
+                    <a href="https://stripe.com/">Stripe</a> directly, so you don't need to trust me with it.</p>
+            </div>
+        </div>
+    </noscript>
+    <div class="container text-center hidden" id="thanks">
+        {% include "post-donation-message.html" %}
+        <form id="new-donor-password" class="hidden" action="{{ root }}/password-reset" method="POST">
+            <p>Set a password now if you want to manage your donations later:</p>
+            <input type="password" placeholder="Password" name="password"/>
+            <input type="hidden" name="token" id="reset-token"/>
+            <button class="btn btn-primary btn-sm">Submit</button>
+        </form>
+    </div>
+    <div class="container text-center" id="donation-stuff">
+        <h3>How much?</h3>
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-              <img
-                class="pull-right"
-                src="{{ avatar }}?s=128"
-                style="border-radius: 5px; margin-left: 1rem"
-                width="128" height="128" />
-              <h1>Donate to {{ _cfg("your-name") }}</h1>
-              {% include "summary.html" %}
-            </div>
-        </div>
-    </div>
-</div>
-<noscript>
-    <div class="container">
-        <div class="alert alert-danger">
-            <p>This page requires Javascript. It's necessary to send your credit card number to
-            <a href="https://stripe.com/">Stripe</a> directly, so you don't need to trust me with it.</p>
-        </div>
-    </div>
-</noscript>
-<div class="container text-center hidden" id="thanks">
-    {% include "post-donation-message.html" %}
-    <form id="new-donor-password" class="hidden" action="{{root}}/password-reset" method="POST">
-        <p>Set a password now if you want to manage your donations later:</p>
-        <input type="password" placeholder="Password" name="password" />
-        <input type="hidden" name="token" id="reset-token" />
-        <button class="btn btn-primary btn-sm">Submit</button>
-    </form>
-</div>
-<div class="container text-center" id="donation-stuff">
-  <h3>How much?</h3>
-  <div class="row">
-    <div class="col-md-8 col-md-offset-2">
-      <div class="btn-group btn-group-justified amounts" role="group" aria-label="...">
-        {% for amt in _cfg("default-amounts").split(" ") %}
-        <div class="btn-group" role="group">
-          <button data-amount="{{ amt }}" type="button"
-            class="btn btn-default {{"active" if _cfg("default-amount") == amt else ""}}"
-            >{{ currency.amount(amt) }}</button>
-        </div>
-        {% endfor %}
-        <div class="btn-group" role="group">
-          <button data-amount="custom" type="button" class="btn btn-default">Custom</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row hidden" id="custom-amount" style="margin-top: 20px;">
-    <div class="col-md-4 col-md-offset-4">
-      <div class="form-group">
-        <div class="input-group">
-          <span class="input-group-addon">{{ currency.symbol }}</span>
-          <input id="custom-amount-text" type="text" value="13.37"
-              class="form-control" placeholder="Amount" />
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div style="margin-top: 16px; text-align: center;">
-    We will actually receive <strong>$<span id="after-fees">0.00</span></strong>, after a 2.9% + 30¢ ($<span id="fee">0.00</span>) fee.
-    <!-- that's <span id="fee-pct-wrapper"><span id="fee-pct">0</span>% of your donation</span> in fees. -->
-  </div>
-
-  <h3>How often?</h3>
-  <div class="row">
-    <div class="col-md-8 col-md-offset-2">
-      <div class="form-group">
-        <div class="btn-group btn-group-justified frequencies" role="group" aria-label="...">
-          <div class="btn-group" role="group">
-            <button data-frequency="once" type="button"
-              class="btn btn-default {{"active" if _cfg("default-type")=="once" else ""}}"
-            >Once</button>
-          </div>
-          <div class="btn-group" role="group">
-            <button data-frequency="monthly" type="button"
-              class="btn btn-default {{"active" if _cfg("default-type")=="monthly" else ""}}"
-            >Monthly</button>
-          </div>
-        </div>
-     </div>
-   </div>
- </div>
-    {% if len(projects) > 1 %}
-    <h3>What project?</h3>
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="form-group">
-                <select id="project" name="project" class="form-control">
-                    <option value="null"
-                        {{ "selected" if selected_project == None else "" }}>None in particular</option>
-                    {% for project in projects %}
-                    <option value="{{ project.id }}"
-                        {{ "selected" if selected_project == project.id else "" }}>{{ project.name }}</option>
+                <div class="btn-group btn-group-justified amounts" role="group" aria-label="...">
+                    {% for amt in _cfg("default-amounts").split(" ") %}
+                        <div class="btn-group" role="group">
+                            <button data-amount="{{ amt }}" type="button"
+                                    class="btn btn-default {{ "active" if _cfg("default-amount") == amt else "" }}"
+                            >{{ currency.amount(amt) }}</button>
+                        </div>
                     {% endfor %}
-                </select>
+                    <div class="btn-group" role="group">
+                        <button data-amount="custom" type="button" class="btn btn-default">Custom</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    {% endif %}
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="form-group">
-                <input type="text" id="comments" class="form-control" placeholder="Any comments?" maxlength="512" />
+        <div class="row hidden" id="custom-amount" style="margin-top: 20px;">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">{{ currency.symbol }}</span>
+                        <input id="custom-amount-text" type="text" value="13.37"
+                               class="form-control" placeholder="Amount"/>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="alert alert-danger hidden" id="errors">
-                <p></p>
-            </div>
-            <button class="btn btn-block btn-success" id="donate-button">Donate</button>
+
+        <div style="margin-top: 16px; text-align: center;">
+            We will actually receive <strong>$<span id="after-fees">0.00</span></strong>, after a 2.9% + 30¢ ($<span
+                id="fee">0.00</span>) fee.
+            <!-- that's <span id="fee-pct-wrapper"><span id="fee-pct">0</span>% of your donation</span> in fees. -->
         </div>
+
+        <h3>How often?</h3>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="form-group">
+                    <div class="btn-group btn-group-justified frequencies" role="group" aria-label="...">
+                        <div class="btn-group" role="group">
+                            <button data-frequency="once" type="button"
+                                    class="btn btn-default {{ "active" if _cfg("default-type")=="once" else "" }}"
+                            >Once
+                            </button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button data-frequency="monthly" type="button"
+                                    class="btn btn-default {{ "active" if _cfg("default-type")=="monthly" else "" }}"
+                            >Monthly
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if len(projects) > 1 %}
+            <h3>What project?</h3>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="form-group">
+                        <select id="project" name="project" class="form-control">
+                            <option value="null"
+                                    {{ "selected" if selected_project == None else "" }}>None in particular
+                            </option>
+                            {% for project in projects %}
+                                <option value="{{ project.id }}"
+                                        {{ "selected" if selected_project == project.id else "" }}>{{ project.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="form-group">
+                    <input type="text" id="comments" class="form-control" placeholder="Any comments?" maxlength="512"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="alert alert-danger hidden" id="errors">
+                    <p></p>
+                </div>
+                <button class="btn btn-block btn-success" id="donate-button">Donate</button>
+            </div>
+        </div>
+
+        {% include "goal.html" %}
+
     </div>
+    <hr/>
+    <div class="container text-center">
+        {% if not user %}
+            <p>
+                Been here before? <strong><a href="login">Log in</a></strong> to view your donation
+                history, edit recurring donations, and so on. :)
+            </p>
+        {% elif user.admin %}
+            <p>
+                Access <a href="admin">admin panel</a>.
+            </p>
+        {% else %}
+            <p>
+                You are logged in - <strong><a href="panel">Click here</a></strong> to view your donation
+                history, edit recurring donations, and so on. :)
+            </p>
+        {% endif %}
 
-  {% include "goal.html" %}
-
-</div>
-<hr />
-<div class="container text-center">
-    {% if not user %}
-    <p>
-          Been here before? <strong><a href="login">Log in</a></strong> to view your donation
-          history, edit recurring donations, and so on. :)
-    </p>
-    {% elif user.admin %}
-    <p>
-            Access <a href="admin">admin panel</a>.
-    </p>
-    {% else %}
-    <p>
-            You are logged in - <strong><a href="panel">Click here</a></strong> to view your donation
-            history, edit recurring donations, and so on. :)
-    </p>
-    {% endif %}
-
-    <p>
-        <small class="text-muted">
-            Powered by <a href="https://github.com/shleeable/shleepay">Shleepay (Fosspay fork)</a> - {{ version }}.
-        </small>
-    </p>
-</div>
+        <p>
+            <small class="text-muted">
+                Powered by <a href="https://github.com/shleeable/shleepay">Shleepay (Fosspay fork)</a> - {{ version }}.
+            </small>
+        </p>
+    </div>
 {% endblock %}

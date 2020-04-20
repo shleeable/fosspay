@@ -23,6 +23,7 @@ logging.getLogger("scss").addHandler(sh)
 env = 'dev'
 config = None
 
+
 def load_config():
     global config
     config = ConfigParser()
@@ -31,6 +32,7 @@ def load_config():
         signal.signal(signal.SIGHUP, lambda *args: load_config())
     except ValueError as e:
         logger.warn(e)
+
 
 load_config()
 

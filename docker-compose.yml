@@ -16,10 +16,10 @@ services:
       - external
       - internal
     ports:
-     - "127.0.0.1:5000:5000"
+      - "127.0.0.1:5000:5000"
     depends_on:
       - postgres
-      
+
   postgres:
     restart: unless-stopped
     image: postgres:12

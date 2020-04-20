@@ -1,87 +1,87 @@
 {% extends "layout.html" %}
-{% block container %} 
-<h1>FossPay Setup</h1>
-<p>Congrats! You have FossPay up and running.</p>
+{% block container %}
+    <h1>FossPay Setup</h1>
+    <p>Congrats! You have FossPay up and running.</p>
 
-<h2>config.ini</h2>
-<ul class="list-unstyled">
-    <li>
-        {% if _cfg("secret-key") == "hello world" %}
-        <span class="glyphicon glyphicon-remove text-danger"></span>
-        You need to change the secret key to something other than "hello world".
-        {% else %}
-        <span class="glyphicon glyphicon-ok text-success"></span>
-        Your secret key looks good.
-        {% endif %}
-    </li>
+    <h2>config.ini</h2>
+    <ul class="list-unstyled">
+        <li>
+            {% if _cfg("secret-key") == "hello world" %}
+                <span class="glyphicon glyphicon-remove text-danger"></span>
+                You need to change the secret key to something other than "hello world".
+            {% else %}
+                <span class="glyphicon glyphicon-ok text-success"></span>
+                Your secret key looks good.
+            {% endif %}
+        </li>
 
-    <li>
-        {% if _cfg("domain") == "localhost:5000" %}
-        <span class="glyphicon glyphicon-remove text-danger"></span>
-        You should change your domain to something other than localhost.
-        {% else %}
-        <span class="glyphicon glyphicon-ok text-success"></span>
-        Your domain is set to "{{_cfg("domain")}}".
-        {% endif %}
-    </li>
+        <li>
+            {% if _cfg("domain") == "localhost:5000" %}
+                <span class="glyphicon glyphicon-remove text-danger"></span>
+                You should change your domain to something other than localhost.
+            {% else %}
+                <span class="glyphicon glyphicon-ok text-success"></span>
+                Your domain is set to "{{ _cfg("domain") }}".
+            {% endif %}
+        </li>
 
-    <li>
-        {% if _cfg("protocol") != "https" %}
-        <span class="glyphicon glyphicon-remove text-danger"></span>
-        Stripe requires your website to use HTTPS.
-        {% else %}
-        <span class="glyphicon glyphicon-ok text-success"></span>
-        Stripe requires your website to use HTTPS.
-        {% endif %}
-    </li>
+        <li>
+            {% if _cfg("protocol") != "https" %}
+                <span class="glyphicon glyphicon-remove text-danger"></span>
+                Stripe requires your website to use HTTPS.
+            {% else %}
+                <span class="glyphicon glyphicon-ok text-success"></span>
+                Stripe requires your website to use HTTPS.
+            {% endif %}
+        </li>
 
-    <li>
-        {% if not _cfg("smtp-host") %}
-        <span class="glyphicon glyphicon-remove text-danger"></span>
-        You should configure an SMTP server to send emails with.
-        {% else %}
-        <span class="glyphicon glyphicon-ok text-success"></span>
-        Your email configuration looks good.
-        {% endif %}
-    </li>
+        <li>
+            {% if not _cfg("smtp-host") %}
+                <span class="glyphicon glyphicon-remove text-danger"></span>
+                You should configure an SMTP server to send emails with.
+            {% else %}
+                <span class="glyphicon glyphicon-ok text-success"></span>
+                Your email configuration looks good.
+            {% endif %}
+        </li>
 
-    <li>
-        {% if not _cfg("stripe-secret") or not _cfg("stripe-publish") %}
-        <span class="glyphicon glyphicon-remove text-danger"></span>
-        Your Stripe API keys are not in your config file.
-        {% else %}
-        <span class="glyphicon glyphicon-ok text-success"></span>
-        Your Stripe API keys look good.
-        {% endif %}
-    </li>
+        <li>
+            {% if not _cfg("stripe-secret") or not _cfg("stripe-publish") %}
+                <span class="glyphicon glyphicon-remove text-danger"></span>
+                Your Stripe API keys are not in your config file.
+            {% else %}
+                <span class="glyphicon glyphicon-ok text-success"></span>
+                Your Stripe API keys look good.
+            {% endif %}
+        </li>
 
-    <li>
-      {% if not _cfg("patreon-access-token") or not _cfg("patreon-campaign") %}
-        <span class="glyphicon glyphicon-remove text-danger"></span>
-        Your Patreon access token and campaign are not configured (optional).
-      {% else %}
-        <span class="glyphicon glyphicon-ok text-success"></span>
-        Your Patreon integration looks good. We'll integrate with
-        <a
-          href="https://patreon.com/{{ _cfg("patreon-campaign") }}"
-          target="_blank" rel="noopener noreferrer"
-        >{{ _cfg("patreon-campaign") }}</a>'s campaign.
-      {% endif %}
-    </li>
-</ul>
-<p>You can make changes and refresh this page if you like.</p>
+        <li>
+            {% if not _cfg("patreon-access-token") or not _cfg("patreon-campaign") %}
+                <span class="glyphicon glyphicon-remove text-danger"></span>
+                Your Patreon access token and campaign are not configured (optional).
+            {% else %}
+                <span class="glyphicon glyphicon-ok text-success"></span>
+                Your Patreon integration looks good. We'll integrate with
+                <a
+                        href="https://patreon.com/{{ _cfg("patreon-campaign") }}"
+                        target="_blank" rel="noopener noreferrer"
+                >{{ _cfg("patreon-campaign") }}</a>'s campaign.
+            {% endif %}
+        </li>
+    </ul>
+    <p>You can make changes and refresh this page if you like.</p>
 
-<h2>Admin Account</h2>
-<p>Enter your details for the admin account:</p>
-<form class="form" action="{{root}}/setup" method="POST">
-    <div class="form-group">
-        <input type="text" class="form-control" name="email"
-            placeholder="Email" value="{{_cfg("your-email")}}" />
-    </div>
-    <div class="form-group">
-        <input type="password" class="form-control" name="password" placeholder="Password" />
-    </div>
-    <input type="submit" value="Continue" class="btn btn-primary" />
-</form>
+    <h2>Admin Account</h2>
+    <p>Enter your details for the admin account:</p>
+    <form class="form" action="{{ root }}/setup" method="POST">
+        <div class="form-group">
+            <input type="text" class="form-control" name="email"
+                   placeholder="Email" value="{{ _cfg("your-email") }}"/>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" name="password" placeholder="Password"/>
+        </div>
+        <input type="submit" value="Continue" class="btn btn-primary"/>
+    </form>
 
 {% endblock %}

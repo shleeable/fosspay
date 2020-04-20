@@ -1,34 +1,34 @@
 {% extends "layout.html" %}
 {% block title %}
-<title>Donation Admin</title>
+    <title>Donation Admin</title>
 {% endblock %}
-{% block body %} 
-<div class="well">
-    <div class="container">
-        <p class="pull-right">
-            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#donation-button-modal">
-                Get donation button
-            </a>
-            <a class="btn btn-default" href="logout">Log out</a>
-        </p>
-        <h1>Donation Admin</h1>
-        <p>Combine this with your <a href="https://dashboard.stripe.com">Stripe
-            dashboard</a> for the full effect.</p>
-    </div>
-</div>
-<div class="container">
-    {% if first %}
+{% block body %}
     <div class="well">
-        <p>
-            You're set up and ready to go! This is your admin panel.
-        </p>
+        <div class="container">
+            <p class="pull-right">
+                <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#donation-button-modal">
+                    Get donation button
+                </a>
+                <a class="btn btn-default" href="logout">Log out</a>
+            </p>
+            <h1>Donation Admin</h1>
+            <p>Combine this with your <a href="https://dashboard.stripe.com">Stripe
+                dashboard</a> for the full effect.</p>
+        </div>
     </div>
-    {% endif %}
-    <h2>Projects</h2>
-    <div class="row">
-        <div class="col-md-9">
-            <table class="table">
-                <thead>
+    <div class="container">
+        {% if first %}
+            <div class="well">
+                <p>
+                    You're set up and ready to go! This is your admin panel.
+                </p>
+            </div>
+        {% endif %}
+        <h2>Projects</h2>
+        <div class="row">
+            <div class="col-md-9">
+                <table class="table">
+                    <thead>
                     <tr>
                         <th style="width: 10%"></th>
                         <th>Project Name</th>
@@ -36,16 +36,31 @@
                         <th>Recurring (active)</th>
                         <th>Recurring (total paid)</th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     {% for project in projects %}
-                    <tr>
-                        <td><form method="POST" action="{{root}}/delete-project" onSubmit="if(!confirm('Are you sure you want to delete project &quot;{{ project.name }}&quot; ?\nOrphaned donations will be associated with &quot;(not specified)&quot; project.\nWarning: This action is irreversible!')){return false;}"><input type="hidden" name="id" value="{{ project.id }}" /><input type="submit" value="&#xe014;" class="btn btn-default pull-right glyphicon" title="Delete project" /></form></td>
-                        <td><form method="POST" action="{{root}}/edit-project"><input class="form-control" type="text" placeholder="{{ project.name }}" value="{{ project.name }}" name="edit-name" /> <input type="hidden" name="id" value="{{ project.id }}" /></form></td>
-                        <td>{{ currency.amount("{:.2f}".format(one_times(project) / 100)) }}</td>
-                        <td>{{ currency.amount("{:.2f}".format(recurring(project) / 100)) }}</td>
-                        <td>{{ currency.amount("{:.2f}".format(recurring_ever(project) / 100)) }}</td>
-                    </tr>
+                        <tr>
+                            <td>
+                                <form method="POST" action="{{ root }}/delete-project"
+                                      onSubmit="if(!confirm('Are you sure you want to delete project &quot;{{ project.name }}&quot; ?\nOrphaned donations will be associated with &quot;(not specified)&quot; project.\nWarning: This action is irreversible!')){return false;}">
+                                    <input type="hidden" name="id" value="{{ project.id }}"/><input type="submit"
+                                                                                                    value="&#xe014;"
+                                                                                                    class="btn btn-default pull-right glyphicon"
+                                                                                                    title="Delete project"/>
+                                </form>
+                            </td>
+                            <td>
+                                <form method="POST" action="{{ root }}/edit-project"><input class="form-control"
+                                                                                            type="text"
+                                                                                            placeholder="{{ project.name }}"
+                                                                                            value="{{ project.name }}"
+                                                                                            name="edit-name"/> <input
+                                        type="hidden" name="id" value="{{ project.id }}"/></form>
+                            </td>
+                            <td>{{ currency.amount("{:.2f}".format(one_times(project) / 100)) }}</td>
+                            <td>{{ currency.amount("{:.2f}".format(recurring(project) / 100)) }}</td>
+                            <td>{{ currency.amount("{:.2f}".format(recurring_ever(project) / 100)) }}</td>
+                        </tr>
                     {% endfor %}
                     <tr>
                         <td></td>
@@ -61,23 +76,23 @@
                         <td>{{ currency.amount("{:.2f}".format(total_recurring / 100)) }}</td>
                         <td>{{ currency.amount("{:.2f}".format(total_recurring_ever / 100)) }}</td>
                     </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-3 well">
+                <h4>Add Project</h4>
+                <p>Donors will not be given a choice of project unless you have at least 2.</p>
+                <form method="POST" action="{{ root }}/create-project">
+                    <div class="form-group">
+                        <input class="form-control" type="text" placeholder="Project name" name="name"/>
+                    </div>
+                    <input type="submit" value="Add" class="btn btn-default pull-right"/>
+                </form>
+            </div>
         </div>
-        <div class="col-md-3 well">
-            <h4>Add Project</h4>
-            <p>Donors will not be given a choice of project unless you have at least 2.</p>
-            <form method="POST" action="{{root}}/create-project">
-                <div class="form-group">
-                    <input class="form-control" type="text" placeholder="Project name" name="name" />
-                </div>
-                <input type="submit" value="Add" class="btn btn-default pull-right" />
-            </form>
-        </div>
-    </div>
-    <h2>Recent Donations <small>50 most recent</small></h2>
-    <table class="table">
-        <thead>
+        <h2>Recent Donations <small>50 most recent</small></h2>
+        <table class="table">
+            <thead>
             <tr>
                 <th style="min-width: 10rem">Date</th>
                 <th>Email</th>
@@ -87,58 +102,59 @@
                 <th>Type</th>
                 <th>Payments</th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             {% for donation in donations %}
-            <tr>
-                <td>{{ donation.created.strftime("%Y-%m-%d") }}</td>
-                <td><a href="mailto:{{ donation.user.email }}">{{ donation.user.email }}</a></td>
-                <td>{{ donation.project.name if donation.project else "" }}</td>
-                <td title="{{ donation.comment }}">{{ donation.comment if donation.comment else "" }}</td>
-                <td>{{ currency.amount("{:.2f}".format(donation.amount / 100)) }}</td>
-                <td>
-                    {{ "Once" if str(donation.type) == "DonationType.one_time" else "Monthly" }}
-                    {{ "(cancelled)" if not donation.active else "" }}
-                </td>
-                <td>
-                    {{donation.payments}}
-                </td>
-            </tr>
+                <tr>
+                    <td>{{ donation.created.strftime("%Y-%m-%d") }}</td>
+                    <td><a href="mailto:{{ donation.user.email }}">{{ donation.user.email }}</a></td>
+                    <td>{{ donation.project.name if donation.project else "" }}</td>
+                    <td title="{{ donation.comment }}">{{ donation.comment if donation.comment else "" }}</td>
+                    <td>{{ currency.amount("{:.2f}".format(donation.amount / 100)) }}</td>
+                    <td>
+                        {{ "Once" if str(donation.type) == "DonationType.one_time" else "Monthly" }}
+                        {{ "(cancelled)" if not donation.active else "" }}
+                    </td>
+                    <td>
+                        {{ donation.payments }}
+                    </td>
+                </tr>
             {% endfor %}
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 
-<div class="modal fade" id="donation-button-modal" tabindex="-1" role="dialog" aria-labelledby="donation-modal-label">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="donation-modal-label">Donation buttons</h4>
-            </div>
-            <div class="modal-body">
-                <p>
-                    You can include a donation button in various places to
-                    drive people to your donation page. Here's how it looks: 
-                    <a href="{{root}}">
-                        <img src="{{root}}/static/donate-with-fosspay.png" />
-                    </a>
-                </p>
-                <p>If you add <code>?project=1</code> to your URL, it will pre-select that project
-                (where 1 is the 1st project you have listed on this page) when users arrive to donate.</p>
-                <p><strong>Markdown</strong></p>
-                <pre>[![Donate with fosspay]({{root}}/static/donate-with-fosspay.png)]({{root}})</pre>
-                <p><strong>HTML</strong></p>
-                <pre>&lt;a href="{{root}}"&gt;&lt;img src="{{root}}/static/donate-with-fosspay.png" alt="Donate with fosspay" /&gt;&lt;/a&gt;</pre>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">
-                    Dismiss
-                </button>
+    <div class="modal fade" id="donation-button-modal" tabindex="-1" role="dialog"
+         aria-labelledby="donation-modal-label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="donation-modal-label">Donation buttons</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        You can include a donation button in various places to
+                        drive people to your donation page. Here's how it looks:
+                        <a href="{{ root }}">
+                            <img src="{{ root }}/static/donate-with-fosspay.png"/>
+                        </a>
+                    </p>
+                    <p>If you add <code>?project=1</code> to your URL, it will pre-select that project
+                        (where 1 is the 1st project you have listed on this page) when users arrive to donate.</p>
+                    <p><strong>Markdown</strong></p>
+                    <pre>[![Donate with fosspay]({{ root }}/static/donate-with-fosspay.png)]({{ root }})</pre>
+                    <p><strong>HTML</strong></p>
+                    <pre>&lt;a href="{{ root }}"&gt;&lt;img src="{{ root }}/static/donate-with-fosspay.png" alt="Donate with fosspay" /&gt;&lt;/a&gt;</pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Dismiss
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
